@@ -19,6 +19,10 @@ st.title('GTFS-RT to JSON')
 
 st.header('Vehicle Positions:')
 
+st.selectbox('Feed type:', ['vehicle', 'tripUpdate', 'alert'], key='selectbox')
+
+feed_type = st.session_state['selectbox']
+
 while True:
     placeholder = st.empty()
     os.system(f'gtfs-realtime https://pysae.com/api/v2/groups/Transdev-Cr92/gtfs-rt -o {output_file}')
@@ -30,7 +34,9 @@ while True:
         
         with placeholder.container():
             for n in j['entity']:
-                if 'vehicle' in n.keys():
+                if f'{feed_type}' in n.keys():
                     st.code(n)
-    sleep(5)
+                    
+    sleep(10)
+    
     placeholder.empty()
