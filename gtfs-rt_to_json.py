@@ -15,7 +15,7 @@ import pandas as pd
 cwd = os.getcwd()
 output_file = 'gtfs-rt_converted.json'
 
-# st.set_page_config(layout="wide")
+st.set_page_config(layout="wide")
 st.title('GTFS-RT to JSON')
 
 st.header('Vehicle Positions:')
@@ -28,15 +28,13 @@ feed_type = st.session_state['selectbox']
 while True:
     points = []
     string = ''
-    # placeholder = st.empty()
+
     os.system(f'gtfs-realtime https://pysae.com/api/v2/groups/Transdev-Cr92/gtfs-rt -o {output_file}')
     
     if os.path.isfile(f'{cwd}/{output_file}'):
         
         with open(f'{cwd}/{output_file}', 'r') as f:
             j = json.load(f)
-        
-        # with placeholder.container():
             
             try:
                 for n in j['entity']:
