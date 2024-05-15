@@ -11,21 +11,27 @@ import os
 from time import sleep
 import json
 import pandas as pd
+import pydeck as pdk
+
 
 cwd = os.getcwd()
 output_file = 'gtfs-rt_converted.json'
 
-st.set_page_config(layout="wide")
-st.title('GTFS-RT to JSON')
+# st.set_page_config(layout="wide")
+st.title('GTFS-RT to JSON Application')
 
-st.header('Vehicle Positions:')
+on = st.toggle("Refresh data", value=True)
+
+
+st.header('Vehicle Positions, Trip Updates and Alerts:')
 
 st.selectbox('Feed type:', ['vehicle', 'tripUpdate', 'alert'], key='selectbox')
 
 feed_type = st.session_state['selectbox']
 
 
-while True:
+def application():
+    
     points = []
     string = ''
 
@@ -42,7 +48,24 @@ while True:
                     if f'{feed_type}' in n.keys():
                         points.append([n['vehicle']['position']['latitude'], n['vehicle']['position']['longitude']])
                 df = pd.DataFrame(points, columns=['lat', 'lon'])
-                st.map(df)
+                
+                st.pydeck_chart(pdk.Deck(
+                    map_style=None,
+                    initial_view_state=pdk.ViewState(
+                        latitude=df['lat'][0],
+                        longitude=df['lon'][0],
+                        zoom=11,
+                        pitch=50,
+                    ),
+                    layers=[
+                    pdk.Layer(
+            'ScatterplotLayer',
+            data=df,
+            get_position='[lon, lat]',
+            get_color='[200, 30, 0, 160]',
+            get_radius=125,)
+                ],
+            ))
             
             except:
                 for n in j['entity']:
@@ -51,5 +74,12 @@ while True:
                 st.code(string)
             
     sleep(10)
+    if not on:
+        return
+    else:
+        st.rerun()
+        application()
+        
+application()
     
-    st.rerun()
+
