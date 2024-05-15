@@ -18,16 +18,19 @@ st.set_page_config(layout="wide")
 st.title('GTFS-RT to JSON')
 
 while True:
+    st.empty()
     os.system(f'gtfs-realtime https://pysae.com/api/v2/groups/Transdev-Cr92/gtfs-rt -o {output_file}')
     
-    # if os.path.isfile(f'{cwd}/{output_file}'):
+    if os.path.isfile(f'{cwd}/{output_file}'):
         
-    with open(f'{cwd}/{output_file}', 'r') as f:
-        j = json.load(f)
+        with open(f'{cwd}/{output_file}', 'r') as f:
+            j = json.load(f)
         
-    for n in j['entity']:
-        st.code(n)
+        for n in j['entity']:
+            if 'vehicle' in n.keys():
+                st.write('vehicle')
+                display = st.code(n)
             
-    sleep(20)
+    sleep(5)
     
     
