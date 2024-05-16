@@ -6,20 +6,26 @@ Created on Wed May 15 13:20:50 2024
 @author: maximeb
 """
 
-from flask import Flask, request, jsonify
+from flask import Flask
 import os
 import json
-from time import sleep
+
 
 cwd = os.getcwd()
 output_file = 'gtfs-rt_converted.json'
+
+
 
 app = Flask(__name__)
 
 @app.route("/api")
 def get():
+    with open('source.txt', 'r') as f:
+        source = f.read()
+
+    source = source
     
-    os.system(f'gtfs-realtime https://pysae.com/api/v2/groups/Transdev-Cr92/gtfs-rt -o {output_file}')
+    os.system(f'gtfs-realtime {source} -o {output_file}')
     
     if os.path.isfile(f'{cwd}/{output_file}'):
         

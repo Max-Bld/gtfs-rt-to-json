@@ -12,7 +12,7 @@ from time import sleep
 import json
 import pandas as pd
 import pydeck as pdk
-import subprocess
+import sys
 
 # FUNCTIONS
 
@@ -69,13 +69,15 @@ def application(source):
 
 # VARIABLES
 
+api_url = sys.argv[1:][0] + '/api'
+
 cwd = os.getcwd()
 output_file = 'gtfs-rt_converted.json'
 
 # APPLICATION
 
 # st.set_page_config(layout="wide")
-
+st.write('API URL:', api_url)
 st.title('GTFS-RT to JSON Application')
 
 on = st.toggle("Refresh data", value=True)
@@ -96,6 +98,9 @@ st.selectbox('Feed type:', ['vehicle', 'tripUpdate', 'alert'], key='selectbox')
 feed_type = st.session_state['selectbox']
 
 source = st.session_state['input']
+
+with open('source.txt', 'w') as f:
+    f.write(source)
 
 if source != '':           
     application(source)
