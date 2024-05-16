@@ -1,10 +1,8 @@
 # gtfs-rt-to-json
-To start the streamlit app:
+## Requirements
+You need Python and the libraries **Streamlit** and **Flask**. You need also **ngrok**.
+## Quick Start
+To start the app:
 ```bash
-streamlit run gtfs_rt_to_json.py
-```
-
-To start the Flask app:
-```bash
-python3 flask_app.py
+python3 launcher.py
 ```
